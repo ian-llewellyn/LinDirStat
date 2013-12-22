@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def humanize(size):
+    output = float(size)
     keys = ['', 'K', 'M', 'G', 'T']
     for suffix in keys:
         if float(size) / pow(1024, keys.index(suffix)) > 1.0:
@@ -35,8 +36,7 @@ if __name__ == '__main__':
         usage()
         sys.exit(os.EX_USAGE)
     else:
-        directory = os.curdir
-    directory = '/home/ian'
+        directory = os.path.abspath(os.curdir)
 
     # while True:
     while True:
