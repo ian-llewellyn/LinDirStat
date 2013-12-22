@@ -8,6 +8,8 @@ greatest amount of space on your system.
 You can load the application from any directory, or pass in a starting directory
 as the only argument.
 
-Navigation within the application is done by entering the number corresponding
-to the directory that is to be anylised next. The '..' command navigates to the
-parent directory.
+Navigation within the application can be done in a number of ways:
+1. by entering the number corresponding to the directory that is to be analysed.
+2. by entering an absolute path.
+3. by entering a relative path.
+4. by using the '..' command to go to the parent directory.
