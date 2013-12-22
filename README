@@ -1,0 +1,13 @@
+LinDirStat
+==========
+Written by Ian Llewellyn
+
+LinDirStat can be used to track down files and directories that are using the
+greatest amount of space on your system.
+
+You can load the application from any directory, or pass in a starting directory
+as the only argument.
+
+Navigation within the application is done by entering the number corresponding
+to the directory that is to be anylised next. The '..' command navigates to the
+parent directory.
