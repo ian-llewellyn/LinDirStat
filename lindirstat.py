@@ -1,33 +1,77 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-base_dir = '/'
+def humanize(size):
+    keys = ['', 'K', 'M', 'G', 'T']
+    for suffix in keys:
+        if float(size) / pow(1024, keys.index(suffix)) > 1.0:
+            output = float(size) / pow(1024, keys.index(suffix))
+        else:
+            break
+    if len('%.1f%s' % (output, suffix)) <= 4:
+        return '%.1f%s' % (output, suffix)
+    else:
+        return '%3.0f%s' % (output, suffix)
 
-import subprocess, os
+def dir_usage(directory):
+    import subprocess
+    proc = subprocess.Popen(('du -s %s/*' % directory), shell=True,
+                            stdout=subprocess.PIPE)
 
-class RootDirectory(object):
-    pass
+    entries = []
+    for entry in proc.stdout.readlines():
+        size, file_name = entry.rstrip().split('\t')
+        entries.append({'file_name': file_name, 'size': int(size)})
 
-class DirEntry(object):
+    return sorted(entries, key=lambda x: x['size'], reverse=True)
 
-    def __init__(self, name, parent):
-        self.name = name
-        self.parent = parent
-        self.children = []
-        self.fullpath = self.parent + os.path.sep + self.name
+if __name__ == '__main__':
+    import sys, os
 
-    def disk_usage(self):
-        pass
+    # dir = curdir or argv[1]
+    if len(sys.argv) == 2:
+        directory = sys.argv[1]
+    elif len(sys.argv) > 2:
+        usage()
+        sys.exit(os.EX_USAGE)
+    else:
+        directory = os.curdir
+    directory = '/home/ian'
 
-    def listdir(self):
-        for name in os.listdir(self.fullpath):
-            self.children.append(DirEntry(name, self.fullpath))
+    # while True:
+    while True:
+        # do_work(dir)
+        entries = dir_usage(directory)
+        for entry in entries[0:10]:
+            print '%2d: %s\t%s' % (entries.index(entry) + 1, humanize(entry['size']), entry['file_name'])
 
-    def __repr__(self):
-        return self.fullpath
+        # read reply
+        reply = ''
+        while True:
+            reply = raw_input("Which directory would you like to enter? "
+                              "('..' to go up one level): ").rstrip()
+            if reply == '..':
+                break
+            if reply.isdigit():
+                reply = int(reply) - 1
+            if reply >= 0 and reply < len(entries):
+                break
 
-top = DirEntry('home', '/')
+        # dir = ...
+        if reply == '..':
+            directory = os.path.dirname(directory)
+        elif type(reply) == int:
+            directory = entries[reply]['file_name']
 
-print top.children
 
-top.listdir()
 
-print top.children
+
+
+
+
+
+
+
+
+
+
