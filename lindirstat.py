@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import subprocess
 
 def humanize(size):
     output = float(size)
@@ -15,7 +16,6 @@ def humanize(size):
         return '%3.0f%s' % (output, suffix)
 
 def dir_usage(directory):
-    import subprocess
     proc = subprocess.Popen(('du -s "%s/"*' % directory), shell=True,
                             stdout=subprocess.PIPE)
 
@@ -50,7 +50,9 @@ if __name__ == '__main__':
     while True:
         # do_work(dir)
         entries = dir_usage(directory)
-        for entry in entries[0:20]:
+        rows, cols = [int(value) for value in subprocess.Popen(
+            ('stty', 'size'), stdout=subprocess.PIPE).stdout.read().split()]
+        for entry in entries[0:rows - 2]:
             op_file_name = '\033[0m%s' % entry['file_name']
             if os.path.isdir(entry['file_name']):
                 op_file_name = '\033[%sm%s\033[0m' % (colors['di'],
