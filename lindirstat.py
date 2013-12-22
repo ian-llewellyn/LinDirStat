@@ -3,7 +3,7 @@
 
 def humanize(size):
     output = float(size)
-    keys = ['', 'K', 'M', 'G', 'T']
+    keys = [' ', 'K', 'M', 'G', 'T']
     for suffix in keys:
         if float(size) / pow(1024, keys.index(suffix)) > 1.0:
             output = float(size) / pow(1024, keys.index(suffix))
@@ -42,36 +42,28 @@ if __name__ == '__main__':
     while True:
         # do_work(dir)
         entries = dir_usage(directory)
-        for entry in entries[0:10]:
-            print '%2d: %s\t%s' % (entries.index(entry) + 1, humanize(entry['size']), entry['file_name'])
+        for entry in entries[0:20]:
+            print '%2d: %s\t%s' % (entries.index(entry) + 1,
+                                   humanize(entry['size']), entry['file_name'])
 
         # read reply
         reply = ''
         while True:
-            reply = raw_input("Which directory would you like to enter? "
+            reply = raw_input("\nWhich directory would you like to enter? "
                               "('..' to go up one level): ").rstrip()
             if reply == '..':
+                # Up one level
                 break
             if reply.isdigit():
                 reply = int(reply) - 1
             if reply >= 0 and reply < len(entries):
+                # Into a directory in the list
                 break
+            # Enhancement: reply == relative path
+            # Enhancement: reply == absolute path
 
         # dir = ...
         if reply == '..':
             directory = os.path.dirname(directory)
         elif type(reply) == int:
             directory = entries[reply]['file_name']
-
-
-
-
-
-
-
-
-
-
-
-
-
