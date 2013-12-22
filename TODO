@@ -1,12 +1,15 @@
 TODO
 ====
-* Withold numbers on file entries
-* Implement absolute paths
-* Implement relative paths
+* Proper error messages:
+  - file is chosen
+  - directory has no contents
+  - directory does not exist
 
 Done
 ====
 * Implement LS_COLORS
+* Implement absolute paths
+* Implement relative paths
 
 Held
 ====

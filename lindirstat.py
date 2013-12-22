@@ -78,17 +78,23 @@ if __name__ == '__main__':
                               "('..' to go up one level): ").rstrip()
             if reply == '..':
                 # Up one level
+                directory = os.path.dirname(directory)
                 break
+
+            if reply.startswith(os.path.sep):
+                # Enhancement: reply == absolute path
+                if os.path.isdir(reply):
+                    directory = reply
+                    break
+
+            if os.path.isdir(os.path.sep.join([directory, reply])):
+                # Enhancement: reply == relative path
+                directory = os.path.sep.join([directory, reply])
+                break
+
             if reply.isdigit():
                 reply = int(reply) - 1
             if reply >= 0 and reply < len(entries):
                 # Into a directory in the list
+                directory = entries[reply]['file_name']
                 break
-            # Enhancement: reply == relative path
-            # Enhancement: reply == absolute path
-
-        # dir = ...
-        if reply == '..':
-            directory = os.path.dirname(directory)
-        elif type(reply) == int:
-            directory = entries[reply]['file_name']
