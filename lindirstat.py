@@ -16,7 +16,7 @@ def humanize(size):
 
 def dir_usage(directory):
     import subprocess
-    proc = subprocess.Popen(('du -s %s/*' % directory), shell=True,
+    proc = subprocess.Popen(('du -s "%s/"*' % directory), shell=True,
                             stdout=subprocess.PIPE)
 
     entries = []
