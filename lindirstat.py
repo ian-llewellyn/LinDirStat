@@ -27,7 +27,7 @@ def dir_usage(directory):
     return sorted(entries, key=lambda x: x['size'], reverse=True)
 
 if __name__ == '__main__':
-    import sys, os
+    import sys, os, glob
 
     # dir = curdir or argv[1]
     if len(sys.argv) == 2:
@@ -38,13 +38,36 @@ if __name__ == '__main__':
     else:
         directory = os.path.abspath(os.curdir)
 
+    colors = {}
+    # Get LS_COLORS
+    for instruction in os.environ['LS_COLORS'].split(':'):
+        if instruction == '':
+            break
+        key, value = list(instruction.split('='))
+        colors[key] = value
+
     # while True:
     while True:
         # do_work(dir)
         entries = dir_usage(directory)
         for entry in entries[0:20]:
+            op_file_name = '\033[0m%s' % entry['file_name']
+            if os.path.isdir(entry['file_name']):
+                op_file_name = '\033[%sm%s\033[0m' % (colors['di'],
+                                                      entry['file_name'])
+            if os.path.islink(entry['file_name']):
+                op_file_name = '\033[%sm%s\033[0m' % (colors['ln'],
+                                                      entry['file_name'])
+            if os.path.isfile(entry['file_name']):
+                op_file_name = '\033[%sm%s\033[0m' % (colors['rs'],
+                                                      entry['file_name'])
+            for pattern in colors:
+                if glob.fnmatch.fnmatch(entry['file_name'], pattern):
+                    op_file_name = '\033[%sm%s\033[0m' % (colors[pattern],
+                                                   entry['file_name'])
+                    break
             print '%2d: %s\t%s' % (entries.index(entry) + 1,
-                                   humanize(entry['size']), entry['file_name'])
+                                   humanize(entry['size']), op_file_name)
 
         # read reply
         reply = ''
